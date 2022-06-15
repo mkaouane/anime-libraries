@@ -7,7 +7,7 @@
 
     <v-card-title>{{title}} </v-card-title>
 
-    <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
+    <v-card-subtitle> {{alternativeTitles}}</v-card-subtitle>
 
     <v-card-actions>
       <v-btn color="orange lighten-2" target="_blank" :href="link" text> Explore </v-btn>
@@ -33,7 +33,7 @@
 
 <script>
 export default {
-   props : ['title', 'image', 'synopsis', 'link'],
+   props : ['title', 'image', 'synopsis', 'link', 'type', 'alternativeTitles'],
    data() {
       return {
          show: false,

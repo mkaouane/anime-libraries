@@ -7,7 +7,7 @@
     <v-app-bar app>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-toolbar-title>Anime Library</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-switch v-model="$vuetify.theme.dark" inset persistent-hint></v-switch>
     </v-app-bar>
@@ -28,6 +28,8 @@
               :image="anime.image"
               :synopsis="anime.synopsis"
               :link="anime.link"
+              :type="anime.type"
+              :alternativeTitles="anime.alternativeTitles[0]"
             />
           </v-col>
         </v-row>
@@ -51,10 +53,9 @@ const token = config.RAPIDAPI_KEY;
 export default {
   components: { CardAnime },
   data: () => ({
-    drawer: null,
+    drawer: false,
     animes: [],
     title: "",
-    show: false,
     page: 1,
   }),
   methods: {
