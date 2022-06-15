@@ -1,16 +1,15 @@
 <template>
   <v-card class="mx-auto" max-width="344">
-    <v-img
-      :src="image"
-      height="200px"
-    ></v-img>
+    <v-img :src="anime.image" height="200px"></v-img>
 
-    <v-card-title>{{title}} </v-card-title>
+    <v-card-title>{{ anime.title }} </v-card-title>
 
-    <v-card-subtitle> {{alternativeTitles}}</v-card-subtitle>
+    <v-card-subtitle> {{ anime.alternativeTitles[0] }}</v-card-subtitle>
 
     <v-card-actions>
-      <v-btn color="orange lighten-2" target="_blank" :href="link" text> Explore </v-btn>
+      <v-btn color="orange lighten-2" target="_blank" :href="anime.link" text>
+        Explore
+      </v-btn>
 
       <v-spacer></v-spacer>
 
@@ -24,7 +23,7 @@
         <v-divider></v-divider>
 
         <v-card-text>
-          {{synopsis}}
+          {{ anime.synopsis }}
         </v-card-text>
       </div>
     </v-expand-transition>
@@ -33,12 +32,12 @@
 
 <script>
 export default {
-   props : ['title', 'image', 'synopsis', 'link', 'type', 'alternativeTitles'],
-   data() {
-      return {
-         show: false,
-      }
-   }
-}
+  props: ["anime"],
+  data() {
+    return {
+      show: false,
+    };
+  },
+};
 </script>
 

@@ -1,56 +1,35 @@
 <template>
-  <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" app>
-      <!--  -->
-    </v-navigation-drawer>
-
-    <v-app-bar app>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
-      <v-toolbar-title>Anime Library</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-switch v-model="$vuetify.theme.dark" inset persistent-hint></v-switch>
-    </v-app-bar>
-
-    <v-main>
-      <v-container>
-        <v-row>
-          <v-col
-            v-for="anime in animes"
-            :key="anime.title"
-            cols="12"
-            sm="12"
-            md="6"
-            lg="4"
-          >
-            <CardAnime
-              :title="anime.title"
-              :image="anime.image"
-              :synopsis="anime.synopsis"
-              :link="anime.link"
-              :type="anime.type"
-              :alternativeTitles="anime.alternativeTitles[0]"
-            />
-          </v-col>
-        </v-row>
-        <div class="text-center">
-          <v-pagination v-model="page" @input="nextPage()" :length="animes.length" circle></v-pagination>
-        </div>
-      </v-container>
-    </v-main>
-  </v-app>
+  <v-row>
+    <v-col
+      v-for="anime in animes"
+      :key="anime.title"
+      cols="12"
+      sm="12"
+      md="6"
+      lg="4"
+    >
+      <CardAnime :anime="anime" />
+    </v-col>
+    <div class="text-center">
+      <v-pagination
+        v-model="page"
+        @input="nextPage()"
+        :length="animes.length"
+        circle
+      ></v-pagination>
+    </div>
+  </v-row>
 </template>
 
 <script>
+// @ is an alias to /src
 import axios from "axios";
-import CardAnime from "./CardAnime.vue";
 import config from "../../config.json";
-
+import CardAnime from "../components/CardAnime.vue";
 const token = config.RAPIDAPI_KEY;
 
-
-
 export default {
+  name: "HomeView",
   components: { CardAnime },
   data: () => ({
     drawer: false,
@@ -77,16 +56,17 @@ export default {
             "X-RapidAPI-Key": `${token}`,
             "X-RapidAPI-Host": "anime-db.p.rapidapi.com",
           },
-        }).then(res => this.animes = res.data.data)
+        })
+        .then((res) => (this.animes = res.data.data))
         .catch((error) => {
           console.error(error);
         });
     },
-      nextPage() {
+    nextPage() {
       this.page + 1;
-      this.getAnimes()
-      console.log(this.page)
-    }
+      this.getAnimes();
+      console.log(this.page);
+    },
   },
   async mounted() {
     try {
@@ -104,7 +84,8 @@ export default {
             "X-RapidAPI-Key": `${token}`,
             "X-RapidAPI-Host": "anime-db.p.rapidapi.com",
           },
-        }).then(res => this.animes = res.data.data)
+        })
+        .then((res) => (this.animes = res.data.data))
         .catch((error) => {
           console.error(error);
         });
