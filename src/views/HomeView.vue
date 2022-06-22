@@ -1,24 +1,33 @@
 <template>
-  <v-row>
-    <v-col
-      v-for="anime in animes"
-      :key="anime.title"
-      cols="12"
-      sm="12"
-      md="6"
-      lg="4"
+  <div>
+    <v-autocomplete
+      v-model="model"
+      :search-input.sync="search"
+      class="my-4"
+      label="Search for an anime"
     >
-      <CardAnime :anime="anime" />
-    </v-col>
+    </v-autocomplete>
+    <v-row v-if="search">
+      <v-col
+        v-for="anime in filteredList"
+        :key="anime._id"
+        cols="12"
+        sm="12"
+        md="6"
+        lg="4"
+      >
+        <CardAnime :anime="anime" />
+      </v-col>
+    </v-row>
     <div class="text-center">
       <v-pagination
         v-model="page"
         @input="nextPage()"
-        :length="animes.length"
+        :length="filteredList.length"
         circle
       ></v-pagination>
     </div>
-  </v-row>
+  </div>
 </template>
 
 <script>
@@ -32,10 +41,13 @@ export default {
   name: "HomeView",
   components: { CardAnime },
   data: () => ({
+    model: "",
+    search: "",
     drawer: false,
     animes: [],
     title: "",
     page: 1,
+    size: 20,
   }),
   methods: {
     toggleCard() {
@@ -47,7 +59,7 @@ export default {
           method: "GET",
           params: {
             page: this.page,
-            size: "9",
+            size: this.size,
             //  genres: "Fantasy,Drama",
             sortBy: "ranking",
             sortOrder: "asc",
@@ -64,8 +76,17 @@ export default {
     },
     nextPage() {
       this.page + 1;
+      this.size = 400;
       this.getAnimes();
       console.log(this.page);
+    },
+  },
+
+  computed: {
+    filteredList() {
+      return this.animes.filter((anime) => {
+        return anime.title.toLowerCase().includes(this.search.toLowerCase());
+      });
     },
   },
   async mounted() {
@@ -75,7 +96,7 @@ export default {
           method: "GET",
           params: {
             page: this.page,
-            size: "9",
+            size: this.size,
             //  genres: "Fantasy,Drama",
             sortBy: "ranking",
             sortOrder: "asc",

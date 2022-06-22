@@ -11,7 +11,10 @@
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>Anime Library</v-toolbar-title>
-      <v-spacer></v-spacer>
+
+    
+            <v-spacer></v-spacer>
+
       <v-switch v-model="$vuetify.theme.dark" inset persistent-hint></v-switch>
     </v-app-bar>
   </div>
@@ -22,6 +25,7 @@ export default {
   data: () => {
     return {
       drawer: false,
+      isLoading: false,
     };
   },
 };

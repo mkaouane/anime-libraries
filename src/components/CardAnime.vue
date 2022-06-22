@@ -1,6 +1,8 @@
 <template>
   <v-card class="mx-auto" max-width="344">
-    <v-img :src="anime.image" height="200px"></v-img>
+    <router-link :to="{ name: 'card' }">
+      <v-img :src="anime.image" height="200px"></v-img>
+    </router-link>
 
     <v-card-title>{{ anime.title }} </v-card-title>
 
