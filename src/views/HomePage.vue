@@ -26,16 +26,14 @@
 
 <script>
 import axios from "axios";
-import config from "../../config.json";
 import CardAnime from "../components/CardAnime.vue";
 
-const token = config.RAPIDAPI_KEY;
+
 
 export default {
   components : {CardAnime},
   data: () => ({
     drawer: false,
-    animes: [],
     title: "",
     page: 1,
   }),

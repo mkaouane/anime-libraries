@@ -7,9 +7,9 @@
       label="Search for an anime"
     >
     </v-autocomplete>
-    <v-row v-if="search">
+ <v-row>
       <v-col
-        v-for="anime in filteredList"
+        v-for="anime in animes"
         :key="anime._id"
         cols="12"
         sm="12"
@@ -21,9 +21,9 @@
     </v-row>
     <div class="text-center">
       <v-pagination
-        v-model="page"
-        @input="nextPage()"
-        :length="filteredList.length"
+        v-model="$store.state.page"
+        @input="$store.dispatch('fetchAnimes')"
+        :length="9"
         circle
       ></v-pagination>
     </div>
@@ -32,10 +32,9 @@
 
 <script>
 // @ is an alias to /src
-import axios from "axios";
-import config from "../../config.json";
+import { mapState } from 'vuex';
 import CardAnime from "../components/CardAnime.vue";
-const token = config.RAPIDAPI_KEY;
+
 
 export default {
   name: "HomeView",
@@ -44,7 +43,6 @@ export default {
     model: "",
     search: "",
     drawer: false,
-    animes: [],
     title: "",
     page: 1,
     size: 20,
@@ -53,66 +51,19 @@ export default {
     toggleCard() {
       this.show = !this.show;
     },
-    async getAnimes() {
-      await axios
-        .get("https://anime-db.p.rapidapi.com/anime", {
-          method: "GET",
-          params: {
-            page: this.page,
-            size: this.size,
-            //  genres: "Fantasy,Drama",
-            sortBy: "ranking",
-            sortOrder: "asc",
-          },
-          headers: {
-            "X-RapidAPI-Key": `${token}`,
-            "X-RapidAPI-Host": "anime-db.p.rapidapi.com",
-          },
-        })
-        .then((res) => (this.animes = res.data.data))
-        .catch((error) => {
-          console.error(error);
-        });
-    },
+   
     nextPage() {
-      this.page + 1;
       this.size = 400;
-      this.getAnimes();
       console.log(this.page);
     },
   },
-
-  computed: {
-    filteredList() {
-      return this.animes.filter((anime) => {
-        return anime.title.toLowerCase().includes(this.search.toLowerCase());
-      });
+   mounted () {
+        this.$store.dispatch('fetchAnimes')
     },
-  },
-  async mounted() {
-    try {
-      await axios
-        .get("https://anime-db.p.rapidapi.com/anime", {
-          method: "GET",
-          params: {
-            page: this.page,
-            size: this.size,
-            //  genres: "Fantasy,Drama",
-            sortBy: "ranking",
-            sortOrder: "asc",
-          },
-          headers: {
-            "X-RapidAPI-Key": `${token}`,
-            "X-RapidAPI-Host": "anime-db.p.rapidapi.com",
-          },
-        })
-        .then((res) => (this.animes = res.data.data))
-        .catch((error) => {
-          console.error(error);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  },
+  computed: mapState([
+        'animes'
+    ]),
+ 
+
 };
 </script>
